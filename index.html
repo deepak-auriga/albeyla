@@ -1,270 +1,152 @@
-import React, { useState } from 'react';
-import { Server, Brain, Database, Layers, GitBranch, AlertTriangle, TrendingUp, MessageSquare, Search, Activity, Zap, Eye, Network } from 'lucide-react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SRE Copilot - Architecture Overview</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body { background: linear-gradient(135deg, #111827, #1e293b 60%, #111827); }
+  </style>
+</head>
+<body class="min-h-screen text-white p-6">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8">
+      <div class="flex items-center gap-3 mb-2">
+        <!-- Brain Icon -->
+        <svg class="w-10 h-10 text-purple-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 7a5 5 0 00-10 0v10a5 5 0 0010 0V7z"/><path d="M12 2v20"/></svg>
+        <h1 class="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+          SRE Copilot
+        </h1>
+      </div>
+      <p class="text-gray-400 text-lg">AI-Agentic Incident Prediction & Autonomous RCA System</p>
+    </div>
 
-const ArchitectureView = () => {
-  const [selectedLayer, setSelectedLayer] = useState('overview');
+    <!-- Navigation (static, overview selected) -->
+    <div class="flex gap-2 mb-6 flex-wrap">
+      <button class="px-4 py-2 rounded-lg font-medium transition-all bg-purple-600 text-white shadow-lg">System Overview</button>
+      <button class="px-4 py-2 rounded-lg font-medium transition-all bg-gray-800 text-gray-300 hover:bg-gray-700">Data Collection Layer</button>
+      <button class="px-4 py-2 rounded-lg font-medium transition-all bg-gray-800 text-gray-300 hover:bg-gray-700">AI Agent Layer</button>
+      <button class="px-4 py-2 rounded-lg font-medium transition-all bg-gray-800 text-gray-300 hover:bg-gray-700">Knowledge & Memory Layer</button>
+      <button class="px-4 py-2 rounded-lg font-medium transition-all bg-gray-800 text-gray-300 hover:bg-gray-700">Interface Layer</button>
+    </div>
 
-  const layers = {
-    overview: {
-      title: 'System Overview',
-      description: 'Complete AI-Agentic SRE Copilot Architecture',
-      components: [
-        { name: 'Data Collection Layer', icon: Activity, color: 'bg-blue-500' },
-        { name: 'AI Agent Layer', icon: Brain, color: 'bg-purple-500' },
-        { name: 'Knowledge & Memory', icon: Database, color: 'bg-green-500' },
-        { name: 'Interface Layer', icon: MessageSquare, color: 'bg-orange-500' }
-      ]
-    },
-    collection: {
-      title: 'Data Collection Layer',
-      description: 'OpenTelemetry-based unified data ingestion',
-      components: [
-        { 
-          name: 'OpenTelemetry Collector', 
-          icon: Server,
-          details: 'Custom wrapper around OTel for logs, traces, metrics',
-          tech: 'Go/Python wrapper, OTel SDK'
-        },
-        { 
-          name: 'Log Parser Agent', 
-          icon: Search,
-          details: 'Structured & unstructured log parsing with embeddings',
-          tech: 'Python, sentence-transformers'
-        },
-        { 
-          name: 'Metrics Aggregator', 
-          icon: TrendingUp,
-          details: 'Time-series data collection (CPU, memory, latency)',
-          tech: 'Prometheus, VictoriaMetrics'
-        },
-        { 
-          name: 'Trace Analyzer', 
-          icon: GitBranch,
-          details: 'Distributed tracing & request flow mapping',
-          tech: 'Jaeger, Tempo'
-        }
-      ]
-    },
-    agents: {
-      title: 'AI Agent Layer',
-      description: 'Multi-agent autonomous system',
-      components: [
-        { 
-          name: 'Orchestrator Agent', 
-          icon: Network,
-          details: 'Master coordinator for all sub-agents',
-          tech: 'LangGraph, Claude API'
-        },
-        { 
-          name: 'Incident Detection Agent', 
-          icon: AlertTriangle,
-          details: 'Real-time anomaly detection using embeddings',
-          tech: 'PyTorch, Isolation Forest, DBSCAN'
-        },
-        { 
-          name: 'RCA Agent', 
-          icon: Search,
-          details: 'Autonomous root cause analysis investigator',
-          tech: 'Claude API, RAG, knowledge graphs'
-        },
-        { 
-          name: 'Prediction Agent', 
-          icon: Eye,
-          details: 'Proactive issue prediction (30-min intervals)',
-          tech: 'LSTM/Transformer models, Prophet'
-        },
-        { 
-          name: 'Learning Agent', 
-          icon: Brain,
-          details: 'Continuous learning from resolutions',
-          tech: 'Online learning, vector DB updates'
-        }
-      ]
-    },
-    knowledge: {
-      title: 'Knowledge & Memory Layer',
-      description: 'Persistent learning and context storage',
-      components: [
-        { 
-          name: 'Vector Database', 
-          icon: Database,
-          details: 'Log embeddings, incident patterns, similarity search',
-          tech: 'Qdrant, Weaviate, or Pinecone'
-        },
-        { 
-          name: 'Knowledge Graph', 
-          icon: GitBranch,
-          details: 'Service topology, dependencies, incident relationships',
-          tech: 'Neo4j, or custom graph DB'
-        },
-        { 
-          name: 'Time-Series DB', 
-          icon: TrendingUp,
-          details: 'Historical metrics, baselines, trend analysis',
-          tech: 'TimescaleDB, InfluxDB'
-        },
-        { 
-          name: 'Incident Repository', 
-          icon: Layers,
-          details: 'Past RCAs, solutions, deployment history',
-          tech: 'PostgreSQL with full-text search'
-        }
-      ]
-    },
-    interface: {
-      title: 'Interface Layer',
-      description: 'User interaction and visualization',
-      components: [
-        { 
-          name: 'Dashboard UI', 
-          icon: Layers,
-          details: 'Real-time system health, topology, incidents',
-          tech: 'React, D3.js, WebSockets'
-        },
-        { 
-          name: 'Chat Interface', 
-          icon: MessageSquare,
-          details: 'Natural language queries to agents',
-          tech: 'React Chat UI, Claude API'
-        },
-        { 
-          name: 'Slack Bot', 
-          icon: Zap,
-          details: 'Alert notifications, interactive RCA requests',
-          tech: 'Slack Bolt SDK, Node.js'
-        },
-        { 
-          name: 'API Gateway', 
-          icon: Server,
-          details: 'REST/GraphQL API for integrations',
-          tech: 'FastAPI, GraphQL'
-        }
-      ]
-    }
-  };
-
-  const dataFlow = [
-    { step: 1, text: 'OTel Agent collects logs/metrics/traces from servers' },
-    { step: 2, text: 'Data Parser converts to structured embeddings' },
-    { step: 3, text: 'Incident Detection Agent analyzes patterns' },
-    { step: 4, text: 'Alert triggers RCA Agent investigation' },
-    { step: 5, text: 'RCA Agent queries Knowledge Graph + Vector DB' },
-    { step: 6, text: 'Solution suggested & pushed to Dashboard/Slack' },
-    { step: 7, text: 'Learning Agent updates knowledge base' }
-  ];
-
-  const currentLayer = layers[selectedLayer];
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 text-white p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <Brain className="w-10 h-10 text-purple-400" />
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-              SRE Copilot
-            </h1>
-          </div>
-          <p className="text-gray-400 text-lg">AI-Agentic Incident Prediction & Autonomous RCA System</p>
-        </div>
-
-        {/* Navigation */}
-        <div className="flex gap-2 mb-6 flex-wrap">
-          {Object.entries(layers).map(([key, layer]) => (
-            <button
-              key={key}
-              onClick={() => setSelectedLayer(key)}
-              className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                selectedLayer === key
-                  ? 'bg-purple-600 text-white shadow-lg'
-                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-              }`}
-            >
-              {layer.title}
-            </button>
-          ))}
-        </div>
-
-        {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Layer Details */}
-          <div className="lg:col-span-2">
-            <div className="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
-              <h2 className="text-2xl font-bold mb-2">{currentLayer.title}</h2>
-              <p className="text-gray-400 mb-6">{currentLayer.description}</p>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {currentLayer.components.map((component, idx) => {
-                  const Icon = component.icon;
-                  return (
-                    <div
-                      key={idx}
-                      className="bg-gray-900 rounded-lg p-4 border border-gray-700 hover:border-purple-500 transition-all"
-                    >
-                      <div className="flex items-start gap-3">
-                        <div className={`${component.color || 'bg-purple-500'} p-2 rounded-lg`}>
-                          <Icon className="w-5 h-5" />
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="font-semibold mb-1">{component.name}</h3>
-                          {component.details && (
-                            <p className="text-sm text-gray-400 mb-2">{component.details}</p>
-                          )}
-                          {component.tech && (
-                            <div className="text-xs text-purple-400 font-mono">{component.tech}</div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+    <!-- Main Content -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Layer Details (overview) -->
+      <div class="lg:col-span-2">
+        <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
+          <h2 class="text-2xl font-bold mb-2">System Overview</h2>
+          <p class="text-gray-400 mb-6">Complete AI-Agentic SRE Copilot Architecture</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-gray-900 rounded-lg p-4 border border-gray-700">
+              <div class="flex items-start gap-3">
+                <div class="bg-blue-500 p-2 rounded-lg">
+                  <!-- Activity Icon -->
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                </div>
+                <div class="flex-1">
+                  <h3 class="font-semibold mb-1">Data Collection Layer</h3>
+                </div>
               </div>
             </div>
-          </div>
-
-          {/* Data Flow */}
-          <div className="lg:col-span-1">
-            <div className="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700 sticky top-6">
-              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                <Zap className="w-5 h-5 text-yellow-400" />
-                Data Flow
-              </h3>
-              <div className="space-y-3">
-                {dataFlow.map((flow) => (
-                  <div key={flow.step} className="flex items-start gap-3">
-                    <div className="bg-purple-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">
-                      {flow.step}
-                    </div>
-                    <p className="text-sm text-gray-300 leading-relaxed">{flow.text}</p>
-                  </div>
-                ))}
+            <div class="bg-gray-900 rounded-lg p-4 border border-gray-700">
+              <div class="flex items-start gap-3">
+                <div class="bg-purple-500 p-2 rounded-lg">
+                  <!-- Brain Icon -->
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 7a5 5 0 00-10 0v10a5 5 0 0010 0V7z"/><path d="M12 2v20"/></svg>
+                </div>
+                <div class="flex-1">
+                  <h3 class="font-semibold mb-1">AI Agent Layer</h3>
+                </div>
+              </div>
+            </div>
+            <div class="bg-gray-900 rounded-lg p-4 border border-gray-700">
+              <div class="flex items-start gap-3">
+                <div class="bg-green-500 p-2 rounded-lg">
+                  <!-- Database Icon -->
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 009 3 9 3 0 009-3V5"/></svg>
+                </div>
+                <div class="flex-1">
+                  <h3 class="font-semibold mb-1">Knowledge & Memory</h3>
+                </div>
+              </div>
+            </div>
+            <div class="bg-gray-900 rounded-lg p-4 border border-gray-700">
+              <div class="flex items-start gap-3">
+                <div class="bg-orange-500 p-2 rounded-lg">
+                  <!-- MessageSquare Icon -->
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                </div>
+                <div class="flex-1">
+                  <h3 class="font-semibold mb-1">Interface Layer</h3>
+                </div>
               </div>
             </div>
           </div>
         </div>
-
-        {/* Key Features */}
-        <div className="mt-8 bg-gradient-to-r from-purple-900/30 to-pink-900/30 rounded-xl p-6 border border-purple-500/30">
-          <h3 className="text-xl font-bold mb-4">🎯 Key Capabilities</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="text-sm">
-              <span className="font-semibold text-purple-400">Autonomous Detection:</span>
-              <p className="text-gray-300">Real-time anomaly detection using ML embeddings</p>
+      </div>
+      <!-- Data Flow -->
+      <div class="lg:col-span-1">
+        <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700 sticky top-6">
+          <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+            <!-- Zap Icon -->
+            <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            Data Flow
+          </h3>
+          <div class="space-y-3">
+            <div class="flex items-start gap-3">
+              <div class="bg-purple-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">1</div>
+              <p class="text-sm text-gray-300 leading-relaxed">OTel Agent collects logs/metrics/traces from servers</p>
             </div>
-            <div className="text-sm">
-              <span className="font-semibold text-purple-400">Predictive Analysis:</span>
-              <p className="text-gray-300">30-min interval health checks with trend prediction</p>
+            <div class="flex items-start gap-3">
+              <div class="bg-purple-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">2</div>
+              <p class="text-sm text-gray-300 leading-relaxed">Data Parser converts to structured embeddings</p>
             </div>
-            <div className="text-sm">
-              <span className="font-semibold text-purple-400">Self-Learning:</span>
-              <p className="text-gray-300">Continuously improves from every incident resolution</p>
+            <div class="flex items-start gap-3">
+              <div class="bg-purple-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">3</div>
+              <p class="text-sm text-gray-300 leading-relaxed">Incident Detection Agent analyzes patterns</p>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="bg-purple-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">4</div>
+              <p class="text-sm text-gray-300 leading-relaxed">Alert triggers RCA Agent investigation</p>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="bg-purple-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">5</div>
+              <p class="text-sm text-gray-300 leading-relaxed">RCA Agent queries Knowledge Graph + Vector DB</p>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="bg-purple-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">6</div>
+              <p class="text-sm text-gray-300 leading-relaxed">Solution suggested & pushed to Dashboard/Slack</p>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="bg-purple-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">7</div>
+              <p class="text-sm text-gray-300 leading-relaxed">Learning Agent updates knowledge base</p>
             </div>
           </div>
         </div>
       </div>
     </div>
-  );
-};
 
-export default ArchitectureView;
+    <!-- Key Features -->
+    <div class="mt-8 bg-gradient-to-r from-purple-900/30 to-pink-900/30 rounded-xl p-6 border border-purple-500/30">
+      <h3 class="text-xl font-bold mb-4">🎯 Key Capabilities</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="text-sm">
+          <span class="font-semibold text-purple-400">Autonomous Detection:</span>
+          <p class="text-gray-300">Real-time anomaly detection using ML embeddings</p>
+        </div>
+        <div class="text-sm">
+          <span class="font-semibold text-purple-400">Predictive Analysis:</span>
+          <p class="text-gray-300">30-min interval health checks with trend prediction</p>
+        </div>
+        <div class="text-sm">
+          <span class="font-semibold text-purple-400">Self-Learning:</span>
+          <p class="text-gray-300">Continuously improves from every incident resolution</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
