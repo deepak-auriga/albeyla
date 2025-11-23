@@ -1,0 +1,87 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+  filelog:
+    include:
+      - /home/auriga/Projects/Albeyla/python-project/logs/*.log
+    start_at: end
+
+  hostmetrics:
+    collection_interval: 30s
+    scrapers:
+      cpu:
+      memory:
+      disk:
+      network:
+      filesystem:
+
+processors:
+  attributes:
+    actions:
+      - key: service.name
+        value: "core-athenamind"
+        action: insert
+      - key: environment
+        value: "production"
+        action: insert
+      - key: host.name
+        from_attribute: host.name
+        action: upsert
+  
+  resource/host:
+    attributes:
+      - key: service.name
+        value: "core-athenamind-host-metrics"
+        action: insert
+
+  resource/app:
+    attributes:
+      - key: service.name
+        value: "core-athenamind"
+        action: insert
+
+  batch:
+    timeout: 10s
+
+exporters:
+  loki:
+    endpoint: "http://localhost:3100/loki/api/v1/push"
+
+  otlp:
+    endpoint: "localhost:14317"
+    tls:
+      insecure: true
+
+  prometheusremotewrite:
+    endpoint: "http://localhost:9090/api/v1/write"
+    tls: 
+      insecure: true
+
+  debug:
+    verbosity: detailed
+service:
+  pipelines:
+    logs:
+      receivers: [filelog]
+      processors: [attributes,resource/host,batch]
+      exporters: [loki]
+
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlp]
+
+    metrics/host:
+      receivers: [hostmetrics]
+      processors: [batch,resource/host]
+      exporters: [prometheusremotewrite, debug]
+
+    metrics/app:
+      receivers: [otlp]
+      processors: [batch, resource/app]
+      exporters: [prometheusremotewrite, debug]
